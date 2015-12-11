@@ -6,11 +6,6 @@ import (
 	"fmt"
 )
 
-const (
-	REQ_SALE = "0200"
-	RES_SALE = "0210"
-)
-
 type Mti struct {
 	Value string
 }

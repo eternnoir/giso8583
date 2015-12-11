@@ -9,7 +9,7 @@ import (
 func TestPack(t *testing.T) {
 	assert := assert.New(t)
 	mti := Mti{}
-	mti.Value = REQ_SALE
+	mti.Value = "0200"
 	result, err := mti.Pack()
 	if err != nil {
 		assert.Fail(fmt.Sprintf("MTI Pack error. %s", err))
@@ -20,13 +20,13 @@ func TestPack(t *testing.T) {
 func TestUnpack(t *testing.T) {
 	assert := assert.New(t)
 	mti := Mti{}
-	mti.Value = REQ_SALE
+	mti.Value = "0200"
 	result, err := mti.Pack()
 	if err != nil {
 		assert.Fail(fmt.Sprintf("MTI Pack error. %s", err))
 	}
 	mti = Mti{}
 	unpackResult, err := mti.Unpack(result)
-	assert.Equal(unpackResult.Value, REQ_SALE)
+	assert.Equal(unpackResult.Value, "0200")
 
 }
