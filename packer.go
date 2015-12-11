@@ -1,6 +1,6 @@
-package iso8583
+package giso8583
 
 type Packer interface {
-	Pack() []byte
-	Unpack() Packer
+	Pack() ([]byte, error)
+	Unpack() (Packer, error)
 }

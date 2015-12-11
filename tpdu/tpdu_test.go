@@ -8,7 +8,7 @@ import (
 
 func TestPack(t *testing.T) {
 	assert := assert.New(t)
-	tpdu, err := NewTpdu()
+	tpdu, err := New()
 	if err != nil {
 		assert.Fail(fmt.Sprint(err))
 	}
@@ -24,7 +24,7 @@ func TestPack(t *testing.T) {
 
 func TestUnpack(t *testing.T) {
 	assert := assert.New(t)
-	tpdu, err := NewTpdu()
+	tpdu, err := New()
 	if err != nil {
 		assert.Fail(fmt.Sprint(err))
 	}
@@ -32,7 +32,7 @@ func TestUnpack(t *testing.T) {
 	tpdu.DestinationAddress = "0297"
 	tpdu.OriginationAddress = "0000"
 	result, err := tpdu.Pack()
-	tpdu, _ = NewTpdu()
+	tpdu, _ = New()
 	tpdu, err = tpdu.Unpack(result)
 	if err != nil {
 		assert.Fail(fmt.Sprintf("TPDU unpack fail. %s", err))

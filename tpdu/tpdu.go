@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-func NewTpdu() (*Tpdu, error) {
+func New() (*Tpdu, error) {
 	tpdu := Tpdu{}
 	tpdu.IdentifierLength = 1
 	tpdu.DestinationAddressLength = 2
