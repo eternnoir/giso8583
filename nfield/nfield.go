@@ -12,6 +12,10 @@ type NField struct {
 	Value  string
 }
 
+func New() *NField {
+	return &NField{}
+}
+
 func (field *NField) Pack() ([]byte, error) {
 	ret, err := hex.DecodeString(field.Value)
 	if err != nil {

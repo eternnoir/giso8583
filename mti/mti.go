@@ -15,6 +15,10 @@ type Mti struct {
 	Value string
 }
 
+func New() *Mti {
+	return &Mti{}
+}
+
 func (mti *Mti) Pack() ([]byte, error) {
 	if mti.Value == "" {
 		return nil, errors.New(fmt.Sprintf("MTI must have value."))

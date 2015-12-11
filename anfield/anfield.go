@@ -9,6 +9,10 @@ type ANField struct {
 	Value  string
 }
 
+func New() *ANField {
+	return &ANField{}
+}
+
 func (field *ANField) Pack() ([]byte, error) {
 	result := []byte(field.Value)
 	field.Length = utf8.RuneCountInString(field.Value)
