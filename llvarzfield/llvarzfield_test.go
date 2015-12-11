@@ -12,7 +12,7 @@ func TestPack(t *testing.T) {
 	field.Value = "1111111111111111D1212"
 	result, _ := field.Pack()
 	rs := hex.EncodeToString(result)
-	assert.Equal(rs, "111111111111111111D12120")
+	assert.Equal(rs, "111111111111111111d12120")
 }
 
 func TestUnpack(t *testing.T) {
@@ -22,5 +22,5 @@ func TestUnpack(t *testing.T) {
 	result, _ := field.Pack()
 	field = New()
 	rs, _ := field.Unpack(result)
-	assert.Equal(rs.Value, "1111111111111111D12120")
+	assert.Equal(rs.Value, "1111111111111111d12120")
 }
