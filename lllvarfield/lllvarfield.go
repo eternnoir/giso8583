@@ -2,6 +2,7 @@ package lllvarfield
 
 import (
 	"encoding/hex"
+	"github.com/eternnoir/giso8583"
 	util "github.com/eternnoir/giso8583/util"
 	"strconv"
 )
@@ -12,7 +13,7 @@ type LLLVARField struct {
 }
 
 func New() *LLLVARField {
-	return &LLLVARField{}
+	return new(LLLVARField)
 }
 
 func (field *LLLVARField) Pack() ([]byte, error) {
@@ -22,7 +23,7 @@ func (field *LLLVARField) Pack() ([]byte, error) {
 	return hex.DecodeString(rawHexData)
 }
 
-func (field *LLLVARField) Unpack(byteary []byte) (*LLLVARField, error) {
+func (field *LLLVARField) Unpack(byteary []byte) (giso8583.Packer, error) {
 	rawHex := hex.EncodeToString(byteary)
 	withoutLenHex := rawHex[4:len(rawHex)]
 	field.Value = withoutLenHex

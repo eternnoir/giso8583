@@ -23,6 +23,7 @@ func New(size int) *Bitmap {
 }
 
 func (bitmap *Bitmap) Pack() ([]byte, error) {
+	fmt.Print(bitmap.String())
 	return bitmap.data, nil
 }
 

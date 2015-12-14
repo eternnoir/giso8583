@@ -21,6 +21,6 @@ func TestUnpack(t *testing.T) {
 	field.Value = "1111111111111111D1212"
 	result, _ := field.Pack()
 	field = New()
-	rs, _ := field.Unpack(result)
-	assert.Equal(rs.Value, "1111111111111111d12120")
+	field.Unpack(result)
+	assert.Equal(field.Value, "1111111111111111d12120")
 }

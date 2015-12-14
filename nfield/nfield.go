@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"github.com/eternnoir/giso8583"
 	"unicode/utf8"
 )
 
@@ -13,7 +14,7 @@ type NField struct {
 }
 
 func New() *NField {
-	return &NField{}
+	return new(NField)
 }
 
 func (field *NField) Pack() ([]byte, error) {
@@ -25,7 +26,7 @@ func (field *NField) Pack() ([]byte, error) {
 	return ret, nil
 }
 
-func (field *NField) Unpack(byteary []byte) (*NField, error) {
+func (field *NField) Unpack(byteary []byte) (giso8583.Packer, error) {
 	field.Value = hex.EncodeToString(byteary)
 	field.Length = utf8.RuneCountInString(field.Value)
 	return field, nil

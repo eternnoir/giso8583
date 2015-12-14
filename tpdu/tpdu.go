@@ -7,11 +7,11 @@ import (
 )
 
 func New() (*Tpdu, error) {
-	tpdu := Tpdu{}
+	tpdu := new(Tpdu)
 	tpdu.IdentifierLength = 1
 	tpdu.DestinationAddressLength = 2
 	tpdu.OriginationAddressLength = 2
-	return &tpdu, nil
+	return tpdu, nil
 }
 
 type Tpdu struct {

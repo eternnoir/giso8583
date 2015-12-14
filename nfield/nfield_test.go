@@ -20,7 +20,7 @@ func TestUnpack(t *testing.T) {
 	field.Value = "000000"
 	result, _ := field.Pack()
 	field = New()
-	field, _ = field.Unpack(result)
+	field.Unpack(result)
 	assert.Equal(field.Value, "000000")
 	assert.Equal(field.Length, 6)
 }

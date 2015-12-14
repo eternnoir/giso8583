@@ -11,7 +11,7 @@ type Mti struct {
 }
 
 func New() *Mti {
-	return &Mti{}
+	return new(Mti)
 }
 
 func (mti *Mti) Pack() ([]byte, error) {
