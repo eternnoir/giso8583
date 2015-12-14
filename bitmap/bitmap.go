@@ -1,85 +1,123 @@
 package bitmap
 
 import (
-	"fmt"
+	"errors"
 )
 
-const BitmapSize = 0x01 << 32
+var ErrOutOfRange = errors.New("Value out of range.")
 
 type Bitmap struct {
-	data    []byte
-	bitsize uint64
-	maxpos  uint64
+	size int
+	vals []byte
 }
 
-func New(size int) *Bitmap {
-	if size == 0 || size > BitmapSize {
-		size = BitmapSize
-	} else if remainder := size % 8; remainder != 0 {
-		size += 8 - remainder
+// New returns a Bitmap. It requires a size. A bitmap with a size of
+// eight or less will be one byte in size, and so on.
+func New(s int) Bitmap {
+	l := s/8 + 1
+	return Bitmap{size: s, vals: make([]byte, l, l)}
+}
+
+func (b *Bitmap) Pack() ([]byte, error) {
+	return b.vals, nil
+}
+
+func (b *Bitmap) Unpack(byteary []byte) (*Bitmap, error) {
+	b.vals = byteary
+	return b, nil
+}
+
+// Size returns the size of a bitmap. This is the number
+// of bits.
+func (b *Bitmap) Size() int {
+	return b.size
+}
+
+// checkRange returns an error if the position
+// passed is not allowed.
+func (b *Bitmap) checkRange(i int) error {
+	if i > b.Size() {
+		return ErrOutOfRange
 	}
-
-	return &Bitmap{data: make([]byte, size>>3), bitsize: uint64(size - 1)}
-}
-
-func (bitmap *Bitmap) Pack() ([]byte, error) {
-	fmt.Print(bitmap.String())
-	return bitmap.data, nil
-}
-
-func (bitmap *Bitmap) Unpack(byteary []byte) (*Bitmap, error) {
-	bitmap.data = byteary
-	return bitmap, nil
-}
-
-func (bitmap *Bitmap) SetBit(offset uint64, value uint8) bool {
-	index, pos := offset/8, offset%8
-
-	if bitmap.bitsize < offset {
-		return false
+	if i < 1 {
+		return ErrOutOfRange
 	}
+	return nil
+}
 
-	if value == 0 {
-		bitmap.data[index] &^= 0x01 << pos
+// For internal use; drives Set and Unset.
+func (b *Bitmap) toggle(i int) {
+	// Position of the byte in b.vals.
+	p := i >> 3
+
+	// Position of the bit in the byte.
+	remainder := 8 - ((i) % 8)
+	// Toggle the bit.
+	if remainder == 1 {
+		b.vals[p] = b.vals[p] ^ 1
 	} else {
-		bitmap.data[index] |= 0x01 << pos
+		b.vals[p] = b.vals[p] ^ (1 << uint(remainder-1))
+	}
+}
 
-		if bitmap.maxpos < offset {
-			bitmap.maxpos = offset
+// Set sets a position in
+// the bitmap to 1.
+func (b *Bitmap) Set(i int) error {
+	if x := b.checkRange(i); x != nil {
+		return x
+	}
+	// Don't unset.
+	val, err := b.Get(i)
+	if err != nil {
+		return err
+	}
+	if val {
+		return nil
+	}
+	b.toggle(i)
+	return nil
+}
+
+// Unset sets a position in
+// the bitmap to 0.
+func (b *Bitmap) Unset(i int) error {
+	// Don't set.
+	val, err := b.Get(i)
+	if err != nil {
+		return err
+	}
+	if val {
+		b.toggle(i)
+	}
+	return nil
+}
+
+// Values returns a slice of ints
+// represented by the values in the bitmap.
+func (b *Bitmap) Values() ([]int, error) {
+	list := make([]int, 0, b.Size())
+	for i := 1; i <= b.Size(); i++ {
+		val, err := b.Get(i)
+		if err != nil {
+			return nil, err
+		}
+		if val {
+			list = append(list, i)
 		}
 	}
-
-	return true
+	return list, nil
 }
 
-func (bitmap *Bitmap) GetBit(offset uint64) uint8 {
-	index, pos := offset/8, offset%8
-
-	if bitmap.bitsize < offset {
-		return 0
+// Get returns a boolean indicating whether
+// the bit is set for the position in question.
+func (b *Bitmap) Get(i int) (bool, error) {
+	if x := b.checkRange(i); x != nil {
+		return false, x
 	}
-
-	return (bitmap.data[index] >> pos) & 0x01
-}
-
-func (bitmap *Bitmap) Maxpos() uint64 {
-	return bitmap.maxpos
-}
-func (bitmap *Bitmap) String() string {
-	var maxTotal, bitTotal uint64 = 100, bitmap.maxpos + 1
-
-	if bitmap.maxpos > maxTotal {
-		bitTotal = maxTotal
+	p := i >> 3
+	remainder := 8 - ((i) % 8)
+	if remainder == 1 {
+		return b.vals[p] > b.vals[p]^1, nil
 	}
-
-	numSlice := make([]uint64, 0, bitTotal)
-
-	var offset uint64
-	for offset = 0; offset < bitTotal; offset++ {
-		if bitmap.GetBit(offset) == 1 {
-			numSlice = append(numSlice, offset)
-		}
-	}
-
-	return fmt.Sprintf("%v", numSlice)
+	return b.vals[p] > b.vals[p]^(1<<uint(remainder-1)), nil
 }
