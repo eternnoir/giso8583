@@ -20,7 +20,6 @@ func (field *LLVARZField) Pack() ([]byte, error) {
 	field.Length = len(field.Value)
 	if (field.Length % 2) == 1 {
 		field.Value = field.Value + "0"
-		field.Length = len(field.Value)
 	}
 	lengthHeader := strconv.Itoa(field.Length / 2)
 	rawHexData := util.PadLeft(lengthHeader, "0", 2) + field.Value
@@ -33,4 +32,8 @@ func (field *LLVARZField) Unpack(byteary []byte) (giso8583.Packer, error) {
 	field.Value = withoutLenHex
 	field.Length = len(field.Value)
 	return field, nil
+}
+
+func (field *LLVARZField) GetValue() string {
+	return field.Value
 }

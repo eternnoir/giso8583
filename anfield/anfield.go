@@ -25,3 +25,7 @@ func (field *ANField) Unpack(byteary []byte) (giso8583.Packer, error) {
 	field.Length = utf8.RuneCountInString(field.Value)
 	return field, nil
 }
+
+func (field *ANField) GetValue() string {
+	return field.Value
+}

@@ -30,3 +30,7 @@ func (field *LLVARField) Unpack(byteary []byte) (giso8583.Packer, error) {
 	field.Length = len(field.Value)
 	return field, nil
 }
+
+func (field *LLVARField) GetValue() string {
+	return field.Value
+}
