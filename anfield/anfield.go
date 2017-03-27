@@ -1,7 +1,6 @@
 package anfield
 
 import (
-	"github.com/eternnoir/giso8583"
 	"unicode/utf8"
 )
 
@@ -20,7 +19,7 @@ func (field *ANField) Pack() ([]byte, error) {
 	return result, nil
 }
 
-func (field *ANField) Unpack(byteary []byte) (giso8583.Packer, error) {
+func (field *ANField) Unpack(byteary []byte) (*ANField, error) {
 	field.Value = string(byteary)
 	field.Length = utf8.RuneCountInString(field.Value)
 	return field, nil

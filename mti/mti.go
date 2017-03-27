@@ -16,11 +16,11 @@ func New() *Mti {
 
 func (mti *Mti) Pack() ([]byte, error) {
 	if mti.Value == "" {
-		return nil, errors.New(fmt.Sprintf("MTI must have value."))
+		return nil, errors.New("MTI must have value.")
 	}
 	ret, err := hex.DecodeString(mti.Value)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("MTI encode error. %s", err))
+		return nil, fmt.Errorf("MTI encode error. %s", err)
 	}
 	return ret, nil
 }

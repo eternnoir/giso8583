@@ -1,8 +1,9 @@
 package anfield
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestPack(t *testing.T) {
@@ -20,6 +21,6 @@ func TestUnpack(t *testing.T) {
 	field.Value = "AAA"
 	result, _ := field.Pack()
 	field = &ANField{}
-	field, _ = field.Unpacke(result)
-	assert.Equal(field.Value, "AAA")
+	field, _ = field.Unpack(result)
+	assert.Equal(field.GetValue(), "AAA")
 }

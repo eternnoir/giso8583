@@ -2,8 +2,9 @@ package llvarzfield
 
 import (
 	"encoding/hex"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestPack(t *testing.T) {
@@ -12,7 +13,7 @@ func TestPack(t *testing.T) {
 	field.Value = "1111111111111111D1212"
 	result, _ := field.Pack()
 	rs := hex.EncodeToString(result)
-	assert.Equal(rs, "111111111111111111d12120")
+	assert.Equal("111111111111111111d12120", rs)
 }
 
 func TestUnpack(t *testing.T) {
@@ -22,5 +23,5 @@ func TestUnpack(t *testing.T) {
 	result, _ := field.Pack()
 	field = New()
 	field.Unpack(result)
-	assert.Equal(field.Value, "1111111111111111d12120")
+	assert.Equal("1111111111111111d12120", field.Value)
 }

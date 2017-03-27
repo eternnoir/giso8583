@@ -34,19 +34,19 @@ func (tpdu *Tpdu) Pack() ([]byte, error) {
 	// Decode Identifier to byte array
 	id, err := hex.DecodeString(tpdu.Identifier)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("TPDU Identifier decode error. %s", err))
+		return nil, fmt.Errorf("TPDU Identifier decode error. %s", err)
 	}
 
 	// Decode Destination Address to byte array.
 	da, err := hex.DecodeString(tpdu.DestinationAddress)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("TPDU DestinationAddress decode error. %s", err))
+		return nil, fmt.Errorf("TPDU DestinationAddress decode error. %s", err)
 	}
 
 	// Decode Origination Address to byte array.
 	oa, err := hex.DecodeString(tpdu.OriginationAddress)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("TPDU OriginationAddress decode error. %s", err))
+		return nil, fmt.Errorf("TPDU OriginationAddress decode error. %s", err)
 	}
 	ret := []byte{}
 	ret = append(ret, id...)
